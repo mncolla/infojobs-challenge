@@ -1,5 +1,5 @@
 import { Logo } from "./assets/logo";
-import AuthButton from "./components/AuthButton";
+import AuthButton from "./components/auth";
 
 export default function Home() {
   return (
