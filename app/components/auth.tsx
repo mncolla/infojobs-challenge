@@ -23,7 +23,7 @@ const AuthButton = () => {
     const code = urlParams.get("code");
 
     if (code) {
-      fetch(`/api/authorize/${code}`, {
+      fetch(`/api/authorize`, {
         headers: {
           "Content-Type": "application/json",
           "InfoJobs-Code": code,
