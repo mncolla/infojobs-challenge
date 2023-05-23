@@ -1,3 +1,5 @@
+import { NextResponse } from "next/server";
+
 const CLIENT_SECRET = "DNytAl3oFLlKvQR5EjrmtwXnwOb7q1MknBHI5vL7T8Fo2Mljyu";
 const REDIRECT_URI = "https://infojobs-challenge.vercel.app";
 const CLIENT_ID = "0017c43570e04426b27e6bc8c75a846a";
@@ -19,6 +21,6 @@ export async function GET(request: Request) {
 
     const data = await res.json();
 
-    return new Response(data, { status: 200 });
+    return NextResponse.json({ data });
   } catch (error) {}
 }
