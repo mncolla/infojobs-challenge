@@ -28,7 +28,7 @@ const AuthButton = () => {
           "Content-Type": "application/json",
           "InfoJobs-Code": code,
         },
-      }).then(({ access_token, expires_in }: any) => {
+      }).then(({ data: { access_token, expires_in } }: any) => {
         const expirationDate = new Date(
           Date.now() + expires_in * 1000
         ).toUTCString();
