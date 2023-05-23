@@ -1,8 +1,8 @@
-/* "use client";
+"use client";
 
 const AuthButton = () => {
   const URL =
-    "https://www.infojobs.net/api/oauth/user-authorize/index.xhtml?scope=CANDIDATE_PROFILE_WITH_EMAIL&client_id=bb69c183aa9d433c8f35a3255db2f8b2&redirect_uri=http://0.0.0.0:3000&response_type=code";
+    "https://www.infojobs.net/api/oauth/user-authorize/index.xhtml?scope=MY_APPLICATIONS,CANDIDATE_PROFILE_WITH_EMAIL,CANDIDATE_READ_CURRICULUM_SKILLS,CV&client_id=0017c43570e04426b27e6bc8c75a846a&redirect_uri=https://infojobs-challenge.vercel.app/&response_type=code";
 
   const handleClick = () => {
     window.location.replace(URL);
@@ -12,4 +12,3 @@ const AuthButton = () => {
 };
 
 export default AuthButton;
- */
