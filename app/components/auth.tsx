@@ -30,7 +30,7 @@ const AuthButton = () => {
         },
       })
         .then((data) => data.json())
-        .then(({ access_token, expires_in }: any) => {
+        .then(({ data: { access_token, expires_in } }) => {
           const expirationDate = new Date(
             Date.now() + expires_in * 1000
           ).toUTCString();
