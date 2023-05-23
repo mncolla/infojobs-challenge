@@ -28,12 +28,15 @@ const AuthButton = () => {
           "Content-Type": "application/json",
           "InfoJobs-Code": code,
         },
-      }).then(({ data: { access_token, expires_in } }: any) => {
-        const expirationDate = new Date(
-          Date.now() + expires_in * 1000
-        ).toUTCString();
-        document.cookie = `access_token=${access_token}; expires=${expirationDate}; path=/`;
-      });
+      })
+        .then((data) => data.json())
+        .then(({ access_token, expires_in }: any) => {
+          const expirationDate = new Date(
+            Date.now() + expires_in * 1000
+          ).toUTCString();
+          z;
+          document.cookie = `access_token=${access_token}; expires=${expirationDate}; path=/`;
+        });
     }
   }, []);
 
