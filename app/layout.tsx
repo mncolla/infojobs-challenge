@@ -4,8 +4,8 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Github | InfoJobs",
-  description: "App for integrate github's projects into InfoJobs",
+  title: "TextCV Generator | InfoJobs",
+  description: "App for auto-generate smart resume with IA",
 };
 
 export default function RootLayout({
