@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 
-const CLIENT_SECRET = "DNytAl3oFLlKvQR5EjrmtwXnwOb7q1MknBHI5vL7T8Fo2Mljyu";
-const REDIRECT_URI = "https://infojobs-challenge.vercel.app";
-const CLIENT_ID = "0017c43570e04426b27e6bc8c75a846a";
+const clientSecret = process.env.CLIENT_SECRET;
+const clientId = process.env.CLIENT_ID;
+const redirectURI = process.env.REDIRECT_URI;
+
+const BASE_URL_API = "https://www.infojobs.net";
 
 export async function GET(request: Request) {
   const code = request.headers.get("InfoJobs-Code");
@@ -13,7 +15,7 @@ export async function GET(request: Request) {
 
   try {
     const res = await fetch(
-      `https://www.infojobs.net/oauth/authorize?grant_type=authorization_code&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&code=${code}&redirect_uri=${REDIRECT_URI}`,
+      `${BASE_URL_API}oauth/authorize?grant_type=authorization_code&client_id=${clientId}&client_secret=${clientSecret}&code=${code}&redirect_uri=${redirectURI}`,
       {
         headers,
       }
@@ -22,5 +24,7 @@ export async function GET(request: Request) {
     const data = await res.json();
 
     return NextResponse.json({ data });
-  } catch (error) {}
+  } catch (error) {
+    return NextResponse.error();
+  }
 }
