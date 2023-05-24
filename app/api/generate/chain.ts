@@ -3,6 +3,7 @@ import {
   Education,
   EducationElement,
   Experience,
+  ExperienceElement,
   FutureJob,
 } from "./types";
 
@@ -13,8 +14,8 @@ export interface Handler {
 
 export class DataFilterer implements Handler {
   private nextHandler: Handler | null = null;
-  private educations: Education;
-  private experiences: Experience;
+  private educations: EducationElement[];
+  private experiences: ExperienceElement[];
   private futureJob: FutureJob;
 
   constructor({ educations, experiences, futureJob }: DataFiltererProps) {
@@ -30,7 +31,7 @@ export class DataFilterer implements Handler {
   handleRequest(data: any): any {
     let lines = "Educacion: ";
 
-    estudios.map((e: EducationElement) => {
+    this.educations.map((e: EducationElement) => {
       const { institutionName, courseName, startingDate, finishingDate } = e;
 
       if (courseName) lines += `He estudiado ${courseName} `;
