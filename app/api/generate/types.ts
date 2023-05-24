@@ -73,7 +73,7 @@ export interface FutureJob {
 }
 
 export interface DataFiltererProps {
-  educations: Education;
-  experiences: Experience;
+  educations: EducationElement[];
+  experiences: ExperienceElement[];
   futureJob: FutureJob;
 }
