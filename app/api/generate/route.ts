@@ -1,20 +1,53 @@
-const infoJobsToken =
-  "MDAxN2M0MzU3MGUwNDQyNmIyN2U2YmM4Yzc1YTg0NmE6RE55dEFsM29GTGxLdlFSNUVqcm10d1hud09iN3ExTWtuQkhJNXZMN1Q4Rm8yTWxqeXU=";
-const accessToken = "9a2387ae-4ebf-4fad-9d14-f14a91544791";
+import { AIProcessor, DataFilterer, DataFormatter } from "./chain";
+import { Fetcher } from "./fetcher";
+import {
+  Curriculum,
+  Education,
+  EducationElement,
+  Experience,
+  FutureJob,
+} from "./types";
+
+const BASE_URL_API = "https://www.infojobs.net/api";
 
 export async function GET(request: Request) {
+  const code = request.headers.get("InfoJobs-Code");
+  const accessToken = request.headers.get("Access-Token");
+
   const headers = {
-    "Content-Type": "application/json",
-    Authorization: `Basic ${infoJobsToken}, Bearer ${accessToken}`,
+    Authorization: `Basic ${code}, Bearer ${accessToken}`,
   };
 
   try {
-    const res = await fetch("https://api.infojobs.net/api/6/candidate", {
-      headers,
+    const fetcher = new Fetcher(BASE_URL_API, headers);
+
+    // get cv for auth user
+    const [curriculum]: Curriculum[] = await fetcher.get("/2/curriculum");
+    const curriculumId = curriculum.code;
+
+    const { educations }: Education = await fetcher.get(
+      `/1/curriculum/${curriculumId}/education`
+    );
+
+    const { experience: experiences }: Experience = await fetcher.get(
+      `/2/curriculum/${curriculumId}/experience`
+    );
+
+    const futureJob: FutureJob = await fetcher.get(
+      `/4/curriculum/${curriculumId}/futurejob`
+    );
+
+    const dataFilterer = new DataFilterer({
+      educations,
+      experiences,
+      futureJob,
     });
+    const dataFormatter = new DataFormatter();
+    const aiProcessor = new AIProcessor();
 
-    const data = await res.json();
+    dataFilterer.setNext(dataFormatter);
+    dataFormatter.setNext(aiProcessor);
 
-    return new Response(JSON.stringify(data), { status: 200 });
+    return new Response(JSON.stringify({}), { status: 200 });
   } catch (error) {}
 }
