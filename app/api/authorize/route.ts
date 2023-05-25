@@ -15,16 +15,15 @@ export async function GET(request: Request) {
 
   try {
     const res = await fetch(
-      `${BASE_URL_API}oauth/authorize?grant_type=authorization_code&client_id=${clientId}&client_secret=${clientSecret}&code=${code}&redirect_uri=${redirectURI}`,
+      `${BASE_URL_API}/oauth/authorize?grant_type=authorization_code&client_id=${clientId}&client_secret=${clientSecret}&code=${code}&redirect_uri=${redirectURI}`,
       {
         headers,
       }
     );
 
     const data = await res.json();
-
     return NextResponse.json({ data });
   } catch (error) {
-    return NextResponse.error();
+    return NextResponse.json({ error });
   }
 }
