@@ -1,12 +1,19 @@
-export const Logo = () => {
+import { PropsWithChildren } from "react";
+
+interface LogoProps extends PropsWithChildren {
+  color?: string;
+  width?: string;
+}
+
+export const Logo = ({ color = "#2088c2", width = "256px" }: LogoProps) => {
   return (
     <svg
-      className="w-64"
+      width={width}
       xmlns="http://www.w3.org/2000/svg"
       x="0"
       y="0"
       viewBox="0 0 138 34.942"
-      fill="#2088c2"
+      fill={color}
     >
       <g>
         <g>
