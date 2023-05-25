@@ -2,20 +2,13 @@
 
 import { useEffect } from "react";
 
-const NECESSARY_SCOPE = [
-  "CV",
-  "CANDIDATE_READ_CURRICULUM_EDUCATION",
-  "CANDIDATE_READ_CURRICULUM_EXPERIENCE",
-  "CANDIDATE_READ_CURRICULUM_FUTURE_JOB",
-];
-const CLIENT_ID = "0017c43570e04426b27e6bc8c75a846a";
-const REDIRECT_URI = "https://infojobs-challenge.vercel.app";
+const necesaryScope = process.env.NECESARY_SCOPE;
+const clientId = process.env.CLIENT_ID;
+const redirectUri = process.env.REDIRECT_URI;
 
 const AuthButton = () => {
   const handleLogin = () => {
-    window.location.href = `https://www.infojobs.net/api/oauth/user-authorize/index.xhtml?scope=${NECESSARY_SCOPE.join(
-      ","
-    )}&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+    window.location.href = `https://www.infojobs.net/api/oauth/user-authorize/index.xhtml?scope=${necesaryScope}&client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
   };
 
   useEffect(() => {
@@ -26,7 +19,6 @@ const AuthButton = () => {
       fetch(`/api/authorize`, {
         headers: {
           "Content-Type": "application/json",
-          "InfoJobs-Code": code,
         },
       })
         .then((data) => data.json())
@@ -35,6 +27,12 @@ const AuthButton = () => {
             Date.now() + expires_in * 1000
           ).toUTCString();
           document.cookie = `access_token=${access_token}; expires=${expirationDate}; path=/`;
+          document.cookie = `basic_token=${code}; expires=${expirationDate}; path=/`;
+          window.history.pushState(
+            {},
+            document.title,
+            window.location.pathname
+          );
         });
     }
   }, []);
