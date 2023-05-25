@@ -1,4 +1,3 @@
-import React from "react";
 import GenerateIAForm from "../components/generateForm";
 
 const TextCV = () => {
