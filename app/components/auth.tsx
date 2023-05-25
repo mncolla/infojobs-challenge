@@ -2,9 +2,10 @@
 
 import { useEffect } from "react";
 
-const necesaryScope = process.env.NECESARY_SCOPE;
-const clientId = process.env.CLIENT_ID;
-const redirectUri = process.env.REDIRECT_URI;
+const necesaryScope =
+  "CV,CANDIDATE_READ_CURRICULUM_EDUCATION,CANDIDATE_READ_CURRICULUM_EXPERIENCE,CANDIDATE_READ_CURRICULUM_FUTURE_JOB";
+const clientId = "0017c43570e04426b27e6bc8c75a846a";
+const redirectUri = "https://infojobs-challenge.vercel.app";
 
 const AuthButton = () => {
   const handleLogin = () => {
