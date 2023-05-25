@@ -1,24 +1,26 @@
+import { cookies } from "next/headers";
 import { AIProcessor, DataFilterer, DataFormatter } from "./chain";
 import { Fetcher } from "./fetcher";
-import {
-  Curriculum,
-  Education,
-  EducationElement,
-  Experience,
-  FutureJob,
-} from "./types";
+import { Curriculum, Education, Experience, FutureJob } from "./types";
 
 const BASE_URL_API = "https://www.infojobs.net/api";
 
 export async function GET(request: Request) {
-  const code = request.headers.get("InfoJobs-Code");
-  const accessToken = request.headers.get("Access-Token");
-
-  const headers = {
-    Authorization: `Basic ${code}, Bearer ${accessToken}`,
-  };
-
   try {
+    const cookieStore = cookies();
+
+    if (!cookieStore.has("access_token") && !cookieStore.has("basic_token")) {
+      return new Response(JSON.stringify({ error: "Not authorized" }), {
+        status: 401,
+      });
+    }
+
+    const basicToken = cookieStore.get("basic_token");
+    const accessToken = request.headers.get("acces_token");
+
+    const headers = {
+      Authorization: `Basic ${basicToken}, Bearer ${accessToken}`,
+    };
     const fetcher = new Fetcher(BASE_URL_API, headers);
 
     // get cv for auth user
@@ -49,5 +51,7 @@ export async function GET(request: Request) {
     dataFormatter.setNext(aiProcessor);
 
     return new Response(JSON.stringify({}), { status: 200 });
-  } catch (error) {}
+  } catch (error) {
+    return new Response(JSON.stringify({ error }), { status: 500 });
+  }
 }
