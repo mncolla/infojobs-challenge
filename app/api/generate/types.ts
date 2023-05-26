@@ -31,19 +31,19 @@ export interface ExperienceElement {
   id: string;
   company: string;
   job: string;
-  description: string;
+  description?: string;
   startingDate: Date;
-  finishingDate: Date;
-  onCourse: string;
+  finishingDate?: Date;
+  onCourse: boolean;
   industry: string;
   level: string;
-  staff: string;
+  staff?: string;
   category: string;
   subcategories: string[];
-  hideSalary: string;
-  salaryMin: string;
-  salaryMax: string;
-  salaryPeriod: string;
+  hideSalary: boolean;
+  salaryMin?: string;
+  salaryMax?: string;
+  salaryPeriod?: string;
   visible: string;
   expertise: Expertise[];
 }
@@ -54,22 +54,22 @@ export interface Expertise {
 
 export interface FutureJob {
   employmentStatus: string;
-  motivationToChange: string;
-  futureJobGoals: string;
+  motivationToChange?: string;
+  futureJobGoals?: string;
   yearsOfExperience: string;
-  lastJobSearch: string;
-  lastJobSearchDetails: string;
+  lastJobSearch?: string;
+  lastJobSearchDetails?: string;
   preferredPosition: string;
   subcategories: string[];
-  contractTypes: string[];
-  workDay: string;
+  contractTypes?: string[];
+  workDay?: string;
   availabilityToChangeHomeAddress: string;
   availabilityToTravel: string;
-  preferredDestinations: string[];
-  salaryPeriod: string;
-  salaryMin: string;
-  preferredSalary: string;
-  working: string;
+  preferredDestinations?: string[];
+  salaryPeriod?: string;
+  salaryMin?: string;
+  preferredSalary?: string;
+  working?: string;
 }
 
 export interface DataFiltererProps {
