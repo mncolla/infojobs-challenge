@@ -39,18 +39,20 @@ export async function GET(request: Request) {
       `/4/curriculum/${curriculumId}/futurejob`
     );
 
-    const dataFilterer = new DataFilterer({
-      educations,
-      experiences,
-      futureJob,
-    });
+    const dataFilterer = new DataFilterer();
     const dataFormatter = new DataFormatter();
     const aiProcessor = new AIProcessor();
 
     dataFilterer.setNext(dataFormatter);
     dataFormatter.setNext(aiProcessor);
 
-    return new Response(JSON.stringify({}), { status: 200 });
+    const text = dataFilterer.handleRequest({
+      educations,
+      experiences,
+      futureJob,
+    });
+
+    return new Response(JSON.stringify({ text }), { status: 200 });
   } catch (error) {
     return new Response(JSON.stringify({ error }), { status: 500 });
   }

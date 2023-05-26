@@ -14,48 +14,28 @@ export interface Handler {
 
 export class DataFilterer implements Handler {
   private nextHandler: Handler | null = null;
-  private educations: EducationElement[];
-  private experiences: ExperienceElement[];
-  private futureJob: FutureJob;
-
-  constructor({ educations, experiences, futureJob }: DataFiltererProps) {
-    this.educations = educations;
-    this.experiences = experiences;
-    this.futureJob = futureJob;
-  }
 
   setNext(handler: Handler): Handler {
     this.nextHandler = handler;
     return handler;
   }
-  handleRequest(data: any): any {
-    let lines = "Educacion: ";
 
-    this.educations.map((e: EducationElement) => {
-      const { institutionName, courseName, startingDate, finishingDate } = e;
-
-      if (courseName) lines += `He estudiado ${courseName} `;
-      if (institutionName) lines += `en ${institutionName}, `;
-      if (startingDate)
-        lines += `${
-          startingDate && "desde " + startingDate.toLocaleDateString("es-ES")
-        } `;
-
-      if (finishingDate)
-        lines += `${
-          finishingDate && "hasta " + finishingDate.toLocaleDateString("es-ES")
-        }.`;
-    });
-
-    console.log("Datos filtrados:", lines);
+  handleRequest({
+    educations,
+    experiences,
+    futureJob,
+  }: DataFiltererProps): any {
+    // Realizar formateo de datos
+    const filteredData = {};
+    console.log("Datos filtrados:", filteredData);
 
     // Pasar la solicitud al siguiente Handler
     if (this.nextHandler) {
-      return this.nextHandler.handleRequest(lines);
+      return this.nextHandler.handleRequest(filteredData);
     }
 
     // Si no hay siguiente Handler, devolver los resultados finales
-    return lines;
+    return filteredData;
   }
 }
 
@@ -66,19 +46,124 @@ export class DataFormatter implements Handler {
     this.nextHandler = handler;
     return handler;
   }
+  handleRequest({
+    educations,
+    experiences,
+    futureJob,
+  }: DataFiltererProps): any {
+    let educationLine = "Educacion: ";
+    let experienceLine = "Experiencia: ";
+    let futureJobLine = "Trabajo futuro: ";
 
-  handleRequest(data: any): any {
-    // Realizar formateo de datos
-    const formattedData = {};
-    console.log("Datos formateados:", formattedData);
+    educations.map((e: EducationElement) => {
+      const { institutionName, courseName, startingDate, finishingDate } = e;
+
+      if (courseName) educationLine += `He estudiado ${courseName} `;
+      if (institutionName) educationLine += `en ${institutionName}, `;
+      if (startingDate)
+        educationLine += `${
+          startingDate && "desde " + startingDate.toLocaleDateString("es-ES")
+        } `;
+
+      if (finishingDate)
+        educationLine += `${
+          finishingDate && "hasta " + finishingDate.toLocaleDateString("es-ES")
+        }.`;
+    });
+
+    experiences.map((e: ExperienceElement) => {
+      const {
+        company,
+        job,
+        description,
+        startingDate,
+        finishingDate,
+        onCourse,
+        category,
+        subcategories,
+        expertise,
+      } = e;
+
+      experienceLine += `${
+        onCourse ? "Trabajo en" : "He trabajado"
+      } en ${company} como ${job}`;
+
+      if (description)
+        experienceLine += ` en mi rol hacía cosas como ${experienceLine}`;
+      experienceLine += ` esto fue desde ${startingDate.toLocaleDateString(
+        "es-ES"
+      )}`;
+
+      if (finishingDate)
+        educationLine += `${
+          finishingDate && "hasta " + finishingDate.toLocaleDateString("es-ES")
+        }.`;
+
+      experienceLine += ` esto pertenece a la categoría de ${category} que contiene las subcategorías ${subcategories.join(
+        ","
+      )}`;
+
+      experienceLine += ` mis skills son ${expertise.join(",")}`;
+    });
+
+    const {
+      employmentStatus,
+      motivationToChange,
+      futureJobGoals,
+      yearsOfExperience,
+      preferredPosition,
+      subcategories,
+      contractTypes,
+      workDay,
+      availabilityToChangeHomeAddress,
+      availabilityToTravel,
+      preferredDestinations,
+    } = futureJob;
+
+    futureJobLine += `Actualmente me encuentro ${employmentStatus}`;
+    if (motivationToChange)
+      futureJobLine += ` me gustaría poder cambiar debido a ${motivationToChange} `;
+
+    if (futureJobGoals)
+      futureJobLine += ` mis metas laborales son ${futureJobGoals} `;
+
+    futureJobLine += ` cuento con ${yearsOfExperience} años de experiencia`;
+
+    futureJobLine += ` deseo poder trabajar como ${preferredPosition} dentro de las categorias ${subcategories.join(
+      ","
+    )} `;
+
+    if (contractTypes)
+      futureJobLine += ` las modalidades de contratación que busco son ${contractTypes.join(
+        ","
+      )}`;
+
+    if (workDay)
+      futureJobLine += ` la jornada laboral de preferencia es ${workDay} `;
+
+    futureJobLine += `la posibilidad que tengo de una re-localización es ${availabilityToChangeHomeAddress}`;
+    futureJobLine += `la posibilidad que tengo para viajar es ${availabilityToTravel}`;
+
+    if (preferredDestinations)
+      futureJobLine += `mis destinos deseados para un proximo trabajo son ${preferredDestinations.join(
+        ","
+      )}`;
 
     // Pasar la solicitud al siguiente Handler
     if (this.nextHandler) {
-      return this.nextHandler.handleRequest(formattedData);
+      return this.nextHandler.handleRequest({
+        educationLine,
+        experienceLine,
+        futureJobLine,
+      });
     }
 
     // Si no hay siguiente Handler, devolver los resultados finales
-    return formattedData;
+    return {
+      educationLine,
+      experienceLine,
+      futureJobLine,
+    };
   }
 }
 
