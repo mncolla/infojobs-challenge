@@ -16,7 +16,7 @@ export async function GET(request: Request) {
     }
 
     const basicToken = cookieStore.get("basic_token");
-    const accessToken = request.headers.get("acces_token");
+    const accessToken = cookieStore.get("access_token");
 
     const headers = {
       Authorization: `Basic ${basicToken}, Bearer ${accessToken}`,
