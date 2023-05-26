@@ -8,7 +8,7 @@ export interface Curriculum {
 }
 
 export interface Education {
-  educations: EducationElement[];
+  education: EducationElement[];
 }
 
 export interface EducationElement {
@@ -73,7 +73,7 @@ export interface FutureJob {
 }
 
 export interface DataFiltererProps {
-  educations: EducationElement[];
-  experiences: ExperienceElement[];
-  futureJob: FutureJob;
+  education?: EducationElement[];
+  experiences?: ExperienceElement[];
+  futureJob?: FutureJob;
 }
