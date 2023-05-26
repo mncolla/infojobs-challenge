@@ -29,7 +29,6 @@ const AuthButton = () => {
             Date.now() + expires_in * 1000
           ).toUTCString();
           document.cookie = `access_token=${access_token}; expires=${expirationDate}; path=/`;
-          document.cookie = `basic_token=${code}; expires=${expirationDate}; path=/`;
           window.history.pushState(
             {},
             document.title,
