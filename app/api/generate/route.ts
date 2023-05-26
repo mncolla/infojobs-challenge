@@ -3,31 +3,32 @@ import { AIProcessor, DataFilterer, DataFormatter } from "./chain";
 import { Fetcher } from "./fetcher";
 import { Curriculum, Education, Experience, FutureJob } from "./types";
 
-const BASE_URL_API = "https://www.infojobs.net/api";
+const BASE_URL_API = "https://api.infojobs.net/api";
+const appToken = process.env.APP_TOKEN;
 
 export async function GET(request: Request) {
   try {
     const cookieStore = cookies();
 
-    if (!cookieStore.has("access_token") && !cookieStore.has("basic_token")) {
+    /* if (!cookieStore.has("access_token") && !cookieStore.has("basic_token")) {
       return new Response(JSON.stringify({ error: "Not authorized" }), {
         status: 401,
       });
-    }
+    } */
 
-    const basicToken = cookieStore.get("basic_token");
-    const accessToken = cookieStore.get("access_token");
+    const accessToken: any = cookieStore.get("access_token")?.value;
 
     const headers = {
-      Authorization: `Basic ${basicToken}, Bearer ${accessToken}`,
+      Authorization: `Basic ${appToken}, Bearer ${accessToken}`,
     };
     const fetcher = new Fetcher(BASE_URL_API, headers);
 
     // get cv for auth user
     const [curriculum]: Curriculum[] = await fetcher.get("/2/curriculum");
+
     const curriculumId = curriculum.code;
 
-    const { educations }: Education = await fetcher.get(
+    const { education }: Education = await fetcher.get(
       `/1/curriculum/${curriculumId}/education`
     );
 
@@ -46,14 +47,17 @@ export async function GET(request: Request) {
     dataFilterer.setNext(dataFormatter);
     dataFormatter.setNext(aiProcessor);
 
-    const text = dataFilterer.handleRequest({
-      educations,
+    const text = await dataFilterer.handleRequest({
+      education,
       experiences,
       futureJob,
     });
 
+    console.log("TEXTO FINAL", text);
+
     return new Response(JSON.stringify({ text }), { status: 200 });
   } catch (error) {
+    console.log("error", error);
     return new Response(JSON.stringify({ error }), { status: 500 });
   }
 }
