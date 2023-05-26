@@ -20,6 +20,7 @@ const AuthButton = () => {
       fetch(`/api/authorize`, {
         headers: {
           "Content-Type": "application/json",
+          "InfoJobs-Code": code,
         },
       })
         .then((data) => data.json())
