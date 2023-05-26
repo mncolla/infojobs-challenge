@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} w-screen h-screen overflow-hidden bg-[#f2f2f2] font-sans`}
+        className={`${inter.className} w-screen h-screen overflow-x-hidden bg-[#f2f2f2] font-sans`}
       >
         <header className="bg-[#2088c2]">
           <nav className="max-w-7xl mx-auto p-3 flex justify-center md:block">
