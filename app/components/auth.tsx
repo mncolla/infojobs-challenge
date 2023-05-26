@@ -38,7 +38,14 @@ const AuthButton = () => {
     }
   }, []);
 
-  return <button onClick={handleLogin}>Autenticarme con InfoJobs</button>;
+  return (
+    <button
+      className="bg-[#ff6340] w-fit px-4 py-3 mt-6 rounded text-white shadow-lg font-semibold"
+      onClick={handleLogin}
+    >
+      Autenticarme con InfoJobs
+    </button>
+  );
 };
 
 export default AuthButton;
