@@ -3,7 +3,7 @@ import {
   DataFiltererProps,
   EducationElement,
   ExperienceElement,
-} from "./types";
+} from "../../types";
 
 export interface Handler {
   setNext(handler: Handler): Handler;
