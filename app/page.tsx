@@ -13,7 +13,7 @@ const getAccessToken = async (code: string) => {
   return { accessToken: access_token, expirationDate };
 };
 
-const getTextCvData = async () => {
+/* const getTextCvData = async () => {
   const data = await fetch(`/api/textcv`, {
     headers: {
       "Content-Type": "application/json",
@@ -23,7 +23,7 @@ const getTextCvData = async () => {
   const { textCv }: any = data.json();
 
   return textCv;
-};
+}; */
 
 const TextCV = async ({ searchParams: { code } }: any) => {
   if (code) {
@@ -32,7 +32,7 @@ const TextCV = async ({ searchParams: { code } }: any) => {
     window.history.pushState({}, document.title, window.location.pathname);
   }
 
-  const textCv = await getTextCvData();
+  const textCv = ""; /* await getTextCvData(); */
 
   return (
     <main className="w-full h-full flex justify-center">
