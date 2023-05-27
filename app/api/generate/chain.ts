@@ -175,7 +175,6 @@ export class AIProcessor implements Handler {
     const generatedText = await generateSummary(
       `${education}, ${experiences}, ${futureJob}`
     );
-    console.log("Texto generado por OpenAI:", generatedText);
     return generatedText;
   }
 }

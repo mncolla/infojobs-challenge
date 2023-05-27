@@ -50,11 +50,8 @@ export async function GET(request: Request) {
       experiences,
     });
 
-    console.log("TEXTO FINAL", text);
-
     return new Response(JSON.stringify({ text }), { status: 200 });
   } catch (error) {
-    console.log("error", error);
     return new Response(JSON.stringify({ error }), { status: 500 });
   }
 }
