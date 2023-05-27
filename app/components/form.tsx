@@ -1,8 +1,12 @@
 "use client";
 
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, PropsWithChildren, useRef, useState } from "react";
 
-const GenerateIAForm = () => {
+interface GenerateIAFormProps extends PropsWithChildren {
+  data?: any;
+}
+
+const GenerateIAForm = ({ data }: GenerateIAFormProps) => {
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
   const textCvRef = useRef<HTMLTextAreaElement>(null);
@@ -41,6 +45,7 @@ const GenerateIAForm = () => {
       <textarea
         className="resize-y w-full appearance-none min-h-[150px] mx-auto overflow-hidden border rounded border-[#c7c7c7] px-2 py-1 focus:outline-none focus:border-[#167db7] focus:border focus:border-solid"
         name="textCvData"
+        value={data}
         id="textCvData"
         ref={textCvRef}
         disabled={isFetching}
