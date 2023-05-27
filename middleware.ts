@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const hasCode = request.nextUrl.searchParams.has("code");
+  /*   const hasCode = request.nextUrl.searchParams.has("code");
   const hasCookie = request.cookies.has("access_token");
   const isLoginURL = request.nextUrl.pathname.startsWith("/login");
 
@@ -11,9 +11,9 @@ export function middleware(request: NextRequest) {
 
   if (isLoginURL && hasCookie) {
     return NextResponse.redirect(new URL("/", request.url));
-  }
+  } */
 }
 
 export const config = {
-  matcher: ["/", "/login"],
+  matcher: [/* "/",  */ "/login23"],
 };
