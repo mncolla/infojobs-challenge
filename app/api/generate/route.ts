@@ -12,12 +12,6 @@ export async function GET(request: Request) {
 
     const accessToken: any = cookieStore.get("access_token")?.value;
 
-    if (!accessToken) {
-      return new Response(JSON.stringify({ error: "Not authorized" }), {
-        status: 401,
-      });
-    }
-
     const headers = {
       Authorization: `Basic ${appToken}, Bearer ${accessToken}`,
     };
