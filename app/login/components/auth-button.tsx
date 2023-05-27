@@ -7,15 +7,12 @@ const necesaryScope =
 const clientId = "0017c43570e04426b27e6bc8c75a846a";
 const redirectUri = "https://infojobs-challenge.vercel.app/login";
 
-const AuthButton = () => {
+const AuthButton = ({ code }: any) => {
   const handleLogin = () => {
     window.location.href = `https://www.infojobs.net/api/oauth/user-authorize/index.xhtml?scope=${necesaryScope}&client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
   };
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get("code");
-
     if (code) {
       fetch(`/api/authorize`, {
         headers: {
@@ -36,7 +33,7 @@ const AuthButton = () => {
           );
         });
     }
-  }, []);
+  }, [code]);
 
   return (
     <button

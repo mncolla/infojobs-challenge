@@ -4,7 +4,7 @@ import { PaperIcon } from "../assets/paper";
 import { UserIcon } from "../assets/user";
 import AuthButton from "./components/auth-button";
 
-export default async function Home() {
+export default async function Login({ searchParams: { code } }: any) {
   return (
     <>
       <main className="flex w-full container mx-auto justify-center md:flex-row mt-14 flex-col">
@@ -26,7 +26,7 @@ export default async function Home() {
             className="bg-[#FFFFFF] sm:w-[330px] border-solid rounded border h-[40px]"
           />
 
-          <AuthButton />
+          <AuthButton code={code} />
         </section>
         <section className="flex flex-col bg-[#FFFFFF] py-[30px] w-[95%] max-w-[470px] mx-auto mt-3 md:mt-0 md:w-[50%] px-6  md:mx-0">
           <h2 className="mb-[35px] text-2xl font-bold">Challenge InfoJobs</h2>
