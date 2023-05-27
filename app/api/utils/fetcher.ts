@@ -11,15 +11,33 @@ export class Fetcher {
   }
 
   async get(url: string): Promise<any> {
-    const res = await fetch(`${this.fetchUrl}${url}`, {
+    const raw = await fetch(`${this.fetchUrl}${url}`, {
+      method: "GET",
       headers: {
-        method: "GET",
         ...this.headers,
       },
     });
 
-    const data = await res.json();
+    const res = await raw.json();
 
-    return data;
+    return res;
+  }
+
+  async put(url: string, body: any): Promise<any> {
+    try {
+      const raw = await fetch(`${this.fetchUrl}${url}`, {
+        method: "PUT",
+        headers: {
+          ...this.headers,
+        },
+        body: JSON.stringify(body),
+      });
+
+      const res = await raw.json();
+
+      return res;
+    } catch (error) {
+      console.log("error", error);
+    }
   }
 }
