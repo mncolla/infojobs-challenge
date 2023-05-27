@@ -1,13 +1,16 @@
 "use client";
 
-import { FormEvent, TextareaHTMLAttributes, useRef, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 
 const GenerateIAForm = () => {
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
   const textCvRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => e.preventDefault();
+  const handleSubmit = (e: FormEvent<HTMLFormElement> | any) => {
+    e.preventDefault();
+    const textValue = e.target.textCvData.value;
+  };
 
   const handleGenerateIA = () => {
     setIsFetching(true);
@@ -46,6 +49,7 @@ const GenerateIAForm = () => {
       <div className="h-[80px] flex  items-center text-xs sm:text-sm transition-all">
         <button
           disabled={isFetching}
+          type="submit"
           className="bg-[#167db7] border-[#167db7] border border-solid rounded text-white shadow-lg px-4 py-2 font-semibold transition-all"
         >
           GUARDAR
