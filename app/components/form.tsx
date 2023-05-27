@@ -1,10 +1,28 @@
 "use client";
 
-import { FormEvent, PropsWithChildren, useRef, useState } from "react";
+import {
+  FormEvent,
+  PropsWithChildren,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 interface GenerateIAFormProps extends PropsWithChildren {
   data?: any;
 }
+
+const getTextCvData = async () => {
+  const data = await fetch(`/api/textcv`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const { textCv }: any = data.json();
+
+  return textCv;
+};
 
 const GenerateIAForm = ({ data }: GenerateIAFormProps) => {
   const [isFetching, setIsFetching] = useState<boolean>(false);
@@ -29,6 +47,12 @@ const GenerateIAForm = ({ data }: GenerateIAFormProps) => {
         setIsFetching(false);
       });
   };
+
+  useEffect(() => {
+    getTextCvData().then((res) => {
+      textCvRef.current!.value = res;
+    });
+  }, []);
 
   return (
     <form
