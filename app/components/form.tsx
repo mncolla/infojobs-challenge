@@ -13,25 +13,39 @@ interface GenerateIAFormProps extends PropsWithChildren {
 }
 
 const getTextCvData = async () => {
-  const data = await fetch(`/api/textcv`, {
+  const res = await fetch(`/api/textcv`, {
     headers: {
       "Content-Type": "application/json",
     },
   });
 
-  const { textCv }: any = data.json();
+  const { data }: any = await res.json();
 
-  return textCv;
+  return data;
+};
+
+const putTextCvData = async (text: any) => {
+  const res = await fetch(`/api/textcv`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(text),
+  });
+
+  return res;
 };
 
 const GenerateIAForm = ({ data }: GenerateIAFormProps) => {
-  const [isFetching, setIsFetching] = useState<boolean>(false);
+  const [isFetching, setIsFetching] = useState<boolean>(true);
 
   const textCvRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement> | any) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement> | any) => {
     e.preventDefault();
     const textValue = e.target.textCvData.value;
+    const res = await putTextCvData(textValue);
+    console.log("resp", res);
   };
 
   const handleGenerateIA = () => {
@@ -51,6 +65,7 @@ const GenerateIAForm = ({ data }: GenerateIAFormProps) => {
   useEffect(() => {
     getTextCvData().then((res) => {
       textCvRef.current!.value = res;
+      setIsFetching(false);
     });
   }, []);
 
