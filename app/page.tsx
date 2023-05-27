@@ -27,7 +27,7 @@ const getTextCvData = async () => {
 
 const TextCV = async ({ searchParams: { code } }: any) => {
   if (code) {
-    const { accessToken, expirationDate }: any = getAccessToken(code);
+    const { accessToken, expirationDate }: any = await getAccessToken(code);
     document.cookie = `access_token=${accessToken}; expires=${expirationDate}; path=/`;
     window.history.pushState({}, document.title, window.location.pathname);
   }
