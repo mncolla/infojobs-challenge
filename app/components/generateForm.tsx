@@ -18,7 +18,6 @@ const GenerateIAForm = () => {
     })
       .then((res) => res.json())
       .then(({ text }: any) => {
-        console.log("text", text);
         textCvRef.current!.value = text;
         setIsFetching(false);
       });

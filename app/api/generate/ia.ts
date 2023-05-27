@@ -18,8 +18,6 @@ const SYSTEM_MESSAGE: ChatCompletionRequestMessage = {
 
 const generateSummary = async (text: string) => {
   try {
-    console.log(`Texto para openai: \n\n${text}`);
-
     const compilation = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [
@@ -30,8 +28,6 @@ const generateSummary = async (text: string) => {
         },
       ],
     });
-
-    console.log("DEBUG IA", compilation.data.choices);
 
     const summary = compilation.data.choices[0].message?.content;
 
