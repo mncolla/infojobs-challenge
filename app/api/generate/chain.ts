@@ -1,4 +1,4 @@
-import generateSummary from "./ia";
+import generateSummary from "../utils/ia";
 import {
   DataFiltererProps,
   EducationElement,

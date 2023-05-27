@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { AIProcessor, DataFormatter } from "./chain";
-import { Fetcher } from "./fetcher";
+import { Fetcher } from "../utils/fetcher";
 import { Curriculum, Education, Experience, FutureJob } from "./types";
 
 const BASE_URL_API = "https://api.infojobs.net/api";
