@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { AIProcessor, DataFilterer, DataFormatter } from "./chain";
+import { AIProcessor, DataFormatter } from "./chain";
 import { Fetcher } from "./fetcher";
 import { Curriculum, Education, Experience, FutureJob } from "./types";
 
@@ -10,13 +10,13 @@ export async function GET(request: Request) {
   try {
     const cookieStore = cookies();
 
-    /* if (!cookieStore.has("access_token") && !cookieStore.has("basic_token")) {
+    const accessToken: any = cookieStore.get("access_token")?.value;
+
+    if (!accessToken) {
       return new Response(JSON.stringify({ error: "Not authorized" }), {
         status: 401,
       });
-    } */
-
-    const accessToken: any = cookieStore.get("access_token")?.value;
+    }
 
     const headers = {
       Authorization: `Basic ${appToken}, Bearer ${accessToken}`,
@@ -36,21 +36,18 @@ export async function GET(request: Request) {
       `/2/curriculum/${curriculumId}/experience`
     );
 
-    const futureJob: FutureJob = await fetcher.get(
+    /*     const futureJob: FutureJob = await fetcher.get(
       `/4/curriculum/${curriculumId}/futurejob`
-    );
+    ); */
 
-    const dataFilterer = new DataFilterer();
-    const dataFormatter = new DataFormatter();
+    const dataFilterer = new DataFormatter();
     const aiProcessor = new AIProcessor();
 
-    dataFilterer.setNext(dataFormatter);
-    dataFormatter.setNext(aiProcessor);
+    dataFilterer.setNext(aiProcessor);
 
     const text = await dataFilterer.handleRequest({
       education,
       experiences,
-      futureJob,
     });
 
     console.log("TEXTO FINAL", text);

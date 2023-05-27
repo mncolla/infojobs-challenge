@@ -10,25 +10,6 @@ export interface Handler {
   handleRequest(data: any): any;
 }
 
-export class DataFilterer implements Handler {
-  private nextHandler: Handler | null = null;
-
-  setNext(handler: Handler): Handler {
-    this.nextHandler = handler;
-    return handler;
-  }
-
-  async handleRequest(data: DataFiltererProps): Promise<any> {
-    console.log("Datos filtrados:", data);
-
-    if (this.nextHandler) {
-      return await this.nextHandler.handleRequest(data);
-    }
-
-    return data;
-  }
-}
-
 export class DataFormatter implements Handler {
   private nextHandler: Handler | null = null;
 
@@ -191,15 +172,10 @@ export class AIProcessor implements Handler {
     experiences,
     futureJob,
   }: any): Promise<any> {
-    // Realizar el procesamiento con OpenAI
-
     const generatedText = await generateSummary(
       `${education}, ${experiences}, ${futureJob}`
     );
-
     console.log("Texto generado por OpenAI:", generatedText);
-
-    // Devolver los resultados finales
     return generatedText;
   }
 }
