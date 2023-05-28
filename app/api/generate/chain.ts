@@ -144,6 +144,12 @@ export class DataFormatter implements Handler {
       }
     }
 
+    console.log("Debug: Datos formateados", {
+      educationLine,
+      futureJobLine,
+      experienceLine,
+    });
+
     if (this.nextHandler) {
       return await this.nextHandler.handleRequest({
         education: educationLine,
