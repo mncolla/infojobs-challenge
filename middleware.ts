@@ -13,8 +13,16 @@ export function middleware(request: NextRequest) {
       { status: 401, headers: { "content-type": "application/json" } }
     );
   }
+
+  if (pathname.startsWith("/") && !request.cookies.has("access_token")) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  /* if (pathname.startsWith("/login") && request.cookies.has("access_token")) {
+    return NextResponse.redirect(new URL("/", request.url));
+  } */
 }
 
 export const config = {
-  matcher: ["/", "/api/textcv", "/api/generate"],
+  matcher: ["/", "/login", "/api/textcv", "/api/generate"],
 };
