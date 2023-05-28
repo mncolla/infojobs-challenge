@@ -17,13 +17,15 @@ export default async function Login({ searchParams: { code } }: any) {
           <input
             type="text"
             disabled
-            className="bg-[#FFFFFF] sm:w-[330px] border-solid rounded border h-[40px] mb-[16px]"
+            placeholder="Ingresa tu email"
+            className="bg-[#FFFFFF] pl-2 sm:w-[330px] border-solid rounded border h-[40px] mb-[16px]"
           />
           <label className="mb-[5px]">Contraseña</label>
           <input
             type="text"
             disabled
-            className="bg-[#FFFFFF] sm:w-[330px] border-solid rounded border h-[40px]"
+            placeholder="Ingresa tu contraseña"
+            className="bg-[#FFFFFF] pl-2 sm:w-[330px] border-solid rounded border h-[40px]"
           />
 
           <AuthButton code={code} />
@@ -45,10 +47,10 @@ export default async function Login({ searchParams: { code } }: any) {
             <PaperIcon width="35px" height="35px" color="#999" />
             <div className="ml-2 flex flex-col">
               <span className="font-bold text-lg">
-                Presiona 'Generar con IA'
+                Elije tu CV y presiona 'Generar con IA'
               </span>
               <span className="text-[#2d3133]">
-                Olvídate de escribir tu CV en texto a mano, <br />
+                Olvídate de escribir tus CVs en texto a mano, <br />
                 deja que la inteligencia artificial lo haga por ti
               </span>
             </div>
@@ -59,10 +61,8 @@ export default async function Login({ searchParams: { code } }: any) {
             <div className="ml-2 flex flex-col">
               <span className="font-bold text-lg">Observa los resultados</span>
               <span className="text-[#2d3133]">
-                La IA revisará tu perfil, tu educación, experiencias
-                <br />
-                laborales y tu proyección a futuro para generar
-                <br /> un CV en texto que se ajuste a ti.
+                La IA revisará el CV seleccionado y generará
+                <br /> un CV en texto que se ajuste a ti
               </span>
             </div>
           </div>

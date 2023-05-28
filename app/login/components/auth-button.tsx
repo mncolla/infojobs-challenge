@@ -50,7 +50,7 @@ const AuthButton = ({ code }: any) => {
 
   return (
     <button
-      className="bg-[#ff6340] w-fit px-4 py-3 mt-6 rounded text-white shadow-lg font-semibold"
+      className="bg-[#ff6340] hover:bg-[#d14f32] w-fit px-4 py-3 mt-6 rounded text-white shadow-lg font-semibold"
       onClick={handleLogin}
     >
       Autenticarme con InfoJobs
