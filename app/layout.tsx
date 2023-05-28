@@ -1,6 +1,7 @@
 import { Logo } from "./assets/logo";
 import "./globals.css";
 import { Inter } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +25,29 @@ export default function RootLayout({
             <Logo color="white" width="100px" />
           </nav>
         </header>
+        <Toaster
+          toastOptions={{
+            position: "bottom-right",
+            style: {
+              color: "white",
+            },
+            success: {
+              style: {
+                background: "#00A550",
+              },
+            },
+            error: {
+              style: {
+                background: "#FF6340",
+              },
+            },
+            loading: {
+              style: {
+                background: "#999999",
+              },
+            },
+          }}
+        />
         {children}
       </body>
     </html>

@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  ChangeEvent,
-  PropsWithChildren,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import {
   generateTextCvWithIA,
   getTextCvData,
@@ -14,11 +8,9 @@ import {
 } from "../services/textcv";
 import { TextCVResponse } from "../types";
 
-interface GenerateIAFormProps extends PropsWithChildren {
-  data?: any;
-}
+import toast from "react-hot-toast";
 
-const GenerateIAForm = ({ data }: GenerateIAFormProps) => {
+const GenerateIAForm = () => {
   const [isFetching, setIsFetching] = useState<boolean>(true);
   const [textcvs, setTextcvs] = useState<TextCVResponse[]>([]);
   const textCvRef = useRef<HTMLTextAreaElement>(null);
@@ -27,7 +19,12 @@ const GenerateIAForm = ({ data }: GenerateIAFormProps) => {
   const handleGenerateIA = async () => {
     setIsFetching(true);
     const cvSelected = selectCvRef.current!.value;
-    const text = await generateTextCvWithIA(cvSelected);
+    const text = await toast.promise(generateTextCvWithIA(cvSelected), {
+      loading: "Generando...",
+      success: "¡Listo!",
+      error: "Error, no se pudo generar",
+    });
+
     textCvRef.current!.value = text;
     setIsFetching(false);
   };
@@ -36,15 +33,25 @@ const GenerateIAForm = ({ data }: GenerateIAFormProps) => {
     setIsFetching(true);
     const cvSelected = selectCvRef.current!.value;
     const textValue = textCvRef.current!.value;
-    await saveTextCvData(cvSelected, textValue);
+    toast.promise(saveTextCvData(cvSelected, textValue), {
+      loading: "Guardando...",
+      success: "¡Guardado!",
+      error: "Error, no se pudo guardar",
+    });
     const cvtexts = await getTextCvData();
     setTextcvs(cvtexts);
     setIsFetching(false);
   };
 
   const handleChangeCv = (e: ChangeEvent<HTMLSelectElement>) => {
-    const found = textcvs.find((cv) => cv.id === e.target.value);
+    const next = textcvs.find((cv) => cv.id === e.target.value);
+    textCvRef.current!.value = next!.text;
+  };
+
+  const handleCancel = () => {
+    const found = textcvs.find((cv) => cv.id === selectCvRef.current!.value);
     textCvRef.current!.value = found!.text;
+    toast("¡Cambios descartados!", { style: { background: "#F1C40F" } });
   };
 
   useEffect(() => {
@@ -73,7 +80,7 @@ const GenerateIAForm = ({ data }: GenerateIAFormProps) => {
         >
           {textcvs.map((cv, i) => (
             <option key={cv.id} value={cv.id} defaultChecked={cv.isPrincipal}>
-              {cv.name} {cv.isPrincipal && <>(Principal)</>}
+              {cv.id} {cv.isPrincipal && <>(Principal)</>}
             </option>
           ))}
         </select>
@@ -81,7 +88,6 @@ const GenerateIAForm = ({ data }: GenerateIAFormProps) => {
       <textarea
         className="resize-y w-full appearance-none min-h-[150px] mx-auto border rounded border-[#c7c7c7] px-2 py-1 focus:outline-none focus:border-[#167db7] focus:border focus:border-solid"
         name="textCvData"
-        value={data}
         id="textCvData"
         ref={textCvRef}
         disabled={isFetching}
@@ -91,13 +97,13 @@ const GenerateIAForm = ({ data }: GenerateIAFormProps) => {
         <button
           disabled={isFetching}
           onClick={handleSave}
-          type="submit"
           className="bg-[#167db7] hover:bg-[#126492] border-[#167db7] border border-solid rounded text-white shadow-lg px-4 py-2 font-semibold transition-all"
         >
           GUARDAR
         </button>
         <button
           disabled={isFetching}
+          onClick={handleCancel}
           className="hover:bg-[#126492] border-[#167db7] border border-solid rounded hover:text-white text-[#167db7] shadow-lg px-4 py-2 font-semibold mx-2 transition-all"
         >
           CANCELAR
