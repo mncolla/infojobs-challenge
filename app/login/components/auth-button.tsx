@@ -1,6 +1,6 @@
 "use client";
 
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const necesaryScope =
@@ -12,6 +12,8 @@ const AuthButton = ({ code }: any) => {
   const handleLogin = () => {
     window.location.href = `https://www.infojobs.net/api/oauth/user-authorize/index.xhtml?scope=${necesaryScope}&client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
   };
+
+  const router = useRouter();
 
   useEffect(() => {
     if (code) {
@@ -32,10 +34,10 @@ const AuthButton = ({ code }: any) => {
             document.title,
             window.location.pathname
           );
-          redirect("/");
+          router.replace("/");
         });
     }
-  }, [code]);
+  }, [code, router]);
 
   return (
     <button
