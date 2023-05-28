@@ -9,16 +9,24 @@ const appToken = process.env.APP_TOKEN;
 export async function GET(request: Request) {
   try {
     const cookieStore = cookies();
+    const accessToken = cookieStore.get("access_token")?.value;
 
-    const accessToken: any = cookieStore.get("access_token")?.value;
+    const { searchParams } = new URL(request.url);
+    const curriculumParam = searchParams.get("curriculumId");
 
     const headers = {
       Authorization: `Basic ${appToken}, Bearer ${accessToken}`,
     };
     const fetcher = new Fetcher(BASE_URL_API, headers);
+    const curriculums: Curriculum[] = await fetcher.get("/2/curriculum");
+    const curriculum = curriculums.find((cv) => cv.code === curriculumParam);
 
-    // get cv for auth user
-    const [curriculum]: Curriculum[] = await fetcher.get("/2/curriculum");
+    if (!curriculum) {
+      return new Response(
+        JSON.stringify({ message: "Curriculum not exists" }),
+        { status: 404 }
+      );
+    }
 
     const curriculumId = curriculum.code;
 
@@ -30,9 +38,9 @@ export async function GET(request: Request) {
       `/2/curriculum/${curriculumId}/experience`
     );
 
-    /*     const futureJob: FutureJob = await fetcher.get(
+    const futureJob: FutureJob = await fetcher.get(
       `/4/curriculum/${curriculumId}/futurejob`
-    ); */
+    );
 
     const dataFilterer = new DataFormatter();
     const aiProcessor = new AIProcessor();
@@ -42,6 +50,7 @@ export async function GET(request: Request) {
     const text = await dataFilterer.handleRequest({
       education,
       experiences,
+      futureJob,
     });
 
     return new Response(JSON.stringify({ text }), { status: 200 });

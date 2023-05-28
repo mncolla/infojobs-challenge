@@ -1,120 +1,118 @@
 "use client";
 
 import {
-  FormEvent,
+  ChangeEvent,
   PropsWithChildren,
   useEffect,
   useRef,
   useState,
 } from "react";
+import {
+  generateTextCvWithIA,
+  getTextCvData,
+  saveTextCvData,
+} from "../services/textcv";
+import { TextCVResponse } from "../types";
 
 interface GenerateIAFormProps extends PropsWithChildren {
   data?: any;
 }
 
-const getTextCvData = async () => {
-  const res = await fetch(`/api/textcv`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  const { data }: any = await res.json();
-
-  return data;
-};
-
-const putTextCvData = async (text: any) => {
-  const res = await fetch(`/api/textcv`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(text),
-  });
-
-  return res;
-};
-
 const GenerateIAForm = ({ data }: GenerateIAFormProps) => {
   const [isFetching, setIsFetching] = useState<boolean>(true);
-
+  const [textcvs, setTextcvs] = useState<TextCVResponse[]>([]);
   const textCvRef = useRef<HTMLTextAreaElement>(null);
+  const selectCvRef = useRef<HTMLSelectElement>(null);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement> | any) => {
-    e.preventDefault();
-    const textValue = e.target.textCvData.value;
-    const res = await putTextCvData(textValue);
-    console.log("resp", res);
+  const handleGenerateIA = async () => {
+    setIsFetching(true);
+    const cvSelected = selectCvRef.current!.value;
+    const text = await generateTextCvWithIA(cvSelected);
+    textCvRef.current!.value = text;
+    setIsFetching(false);
   };
 
-  const handleGenerateIA = () => {
+  const handleSave = async () => {
     setIsFetching(true);
-    fetch(`/api/generate`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then(({ text }: any) => {
-        textCvRef.current!.value = text;
-        setIsFetching(false);
-      });
+    const cvSelected = selectCvRef.current!.value;
+    const textValue = textCvRef.current!.value;
+    await saveTextCvData(cvSelected, textValue);
+    const cvtexts = await getTextCvData();
+    setTextcvs(cvtexts);
+    setIsFetching(false);
+  };
+
+  const handleChangeCv = (e: ChangeEvent<HTMLSelectElement>) => {
+    const found = textcvs.find((cv) => cv.id === e.target.value);
+    textCvRef.current!.value = found!.text;
   };
 
   useEffect(() => {
-    getTextCvData().then((res) => {
-      textCvRef.current!.value = res;
+    getTextCvData().then((res: TextCVResponse[]) => {
+      setTextcvs(res);
+      const principal = res.find((cv) => cv.isPrincipal);
+      textCvRef.current!.value = principal!.text;
       setIsFetching(false);
     });
   }, []);
 
   return (
-    <form
-      action=""
-      onSubmit={handleSubmit}
-      className="w-full md:w-[446px] mx-auto"
-    >
+    <div className="w-full md:w-[446px] mx-auto">
       <h1 className="text-center  text-3xl font-bold text-[#2d3133] mb-9">
         Editar CV en texto
       </h1>
-      <label htmlFor="textCvData" className="mb-2">
-        CV en texto
-      </label>
+      <div className="flex justify-between pb-2">
+        <label htmlFor="textCvData" className="mb-2">
+          CV en texto
+        </label>
+        <select
+          name="cvSelect"
+          id=""
+          ref={selectCvRef}
+          onChange={handleChangeCv}
+        >
+          {textcvs.map((cv, i) => (
+            <option key={cv.id} value={cv.id} defaultChecked={cv.isPrincipal}>
+              {cv.name} {cv.isPrincipal && <>(Principal)</>}
+            </option>
+          ))}
+        </select>
+      </div>
       <textarea
-        className="resize-y w-full appearance-none min-h-[150px] mx-auto overflow-hidden border rounded border-[#c7c7c7] px-2 py-1 focus:outline-none focus:border-[#167db7] focus:border focus:border-solid"
+        className="resize-y w-full appearance-none min-h-[150px] mx-auto border rounded border-[#c7c7c7] px-2 py-1 focus:outline-none focus:border-[#167db7] focus:border focus:border-solid"
         name="textCvData"
         value={data}
         id="textCvData"
         ref={textCvRef}
         disabled={isFetching}
-        placeholder="Completa tu perfil con información adicional relevante para las empresas o datos que no hayas podido introducir en otros campos."
+        placeholder="Completa tu perfil con indivación adicional relevante para las empresas o datos que no hayas podido introducir en otros campos."
       ></textarea>
       <div className="h-[80px] flex  items-center text-xs sm:text-sm transition-all">
         <button
           disabled={isFetching}
+          onClick={handleSave}
           type="submit"
-          className="bg-[#167db7] border-[#167db7] border border-solid rounded text-white shadow-lg px-4 py-2 font-semibold transition-all"
+          className="bg-[#167db7] hover:bg-[#126492] border-[#167db7] border border-solid rounded text-white shadow-lg px-4 py-2 font-semibold transition-all"
         >
           GUARDAR
         </button>
         <button
           disabled={isFetching}
-          className="hover:bg-[#167db7] border-[#167db7] border border-solid rounded hover:text-white text-[#167db7] shadow-lg px-4 py-2 font-semibold mx-2 transition-all"
+          className="hover:bg-[#126492] border-[#167db7] border border-solid rounded hover:text-white text-[#167db7] shadow-lg px-4 py-2 font-semibold mx-2 transition-all"
         >
           CANCELAR
         </button>
         <div className="w-full flex justify-end">
           <button
             onClick={handleGenerateIA}
-            className="bg-[#2D3133] sm:flex border-[#2D3133] border border-solid rounded text-white shadow-lg px-4 py-2 font-semibold transition-all "
+            className="bg-[#2D3133] hover:bg-[#101111] sm:flex border-[#2D3133] border border-solid rounded text-white shadow-lg px-4 py-2 font-semibold transition-all "
           >
             <span className="hidden sm:block">GENERAR CON &nbsp;</span>
             <span>IA</span>
           </button>
         </div>
       </div>
-    </form>
+    </div>
   );
 };
 

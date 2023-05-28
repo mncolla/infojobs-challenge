@@ -77,3 +77,10 @@ export interface DataFiltererProps {
   experiences?: ExperienceElement[];
   futureJob?: FutureJob;
 }
+
+export interface TextCVResponse {
+  text: string;
+  isPrincipal: boolean;
+  id: string;
+  name: string;
+}
