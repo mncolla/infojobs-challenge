@@ -14,7 +14,7 @@ export function middleware(request: NextRequest) {
     );
   }
 
-  if (pathname.startsWith("/") && !request.cookies.has("access_token")) {
+  if (pathname === "/" && !request.cookies.has("access_token")) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
