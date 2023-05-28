@@ -14,6 +14,8 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const curriculumParam = searchParams.get("curriculumId");
 
+    console.log("Debug: curriculumId", curriculumParam);
+
     const headers = {
       Authorization: `Basic ${appToken}, Bearer ${accessToken}`,
     };
@@ -34,19 +36,19 @@ export async function GET(request: Request) {
       `/1/curriculum/${curriculumId}/education`
     );
 
-    console.log("debug educacion", education);
+    console.log("Debug educacion", education);
 
     const { experience: experiences }: Experience = await fetcher.get(
       `/2/curriculum/${curriculumId}/experience`
     );
 
-    console.log("debug experiences", experiences);
+    console.log("Debug experiences", experiences);
 
     const futureJob: FutureJob = await fetcher.get(
       `/4/curriculum/${curriculumId}/futurejob`
     );
 
-    console.log("debug future job", futureJob);
+    console.log("Debug future job", futureJob);
 
     const dataFilterer = new DataFormatter();
     const aiProcessor = new AIProcessor();
@@ -61,6 +63,7 @@ export async function GET(request: Request) {
 
     return new Response(JSON.stringify({ text }), { status: 200 });
   } catch (error) {
+    console.log("Error in /generate", JSON.stringify(error));
     return new Response(JSON.stringify({ error }), { status: 500 });
   }
 }

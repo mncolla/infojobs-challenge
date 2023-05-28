@@ -19,11 +19,12 @@ const GenerateIAForm = () => {
   const handleGenerateIA = async () => {
     setIsFetching(true);
     const cvSelected = selectCvRef.current!.value;
-    const text = await toast.promise(generateTextCvWithIA(cvSelected), {
+    /* const text = await toast.promise(generateTextCvWithIA(cvSelected), {
       loading: "Generando...",
       success: "¡Listo!",
       error: "Error, no se pudo generar",
-    });
+    }); */
+    const text = await generateTextCvWithIA(cvSelected);
 
     textCvRef.current!.value = text;
     setIsFetching(false);
