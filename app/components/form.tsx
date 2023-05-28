@@ -80,7 +80,7 @@ const GenerateIAForm = () => {
         >
           {textcvs.map((cv, i) => (
             <option key={cv.id} value={cv.id} defaultChecked={cv.isPrincipal}>
-              {cv.id} {cv.isPrincipal && <>(Principal)</>}
+              {cv.name} {cv.isPrincipal && <>(Principal)</>}
             </option>
           ))}
         </select>
