@@ -19,21 +19,26 @@ const GenerateIAForm = () => {
   const handleGenerateIA = async () => {
     setIsFetching(true);
     const cvSelected = selectCvRef.current!.value;
-    /* const text = await toast.promise(generateTextCvWithIA(cvSelected), {
+    const text = await toast.promise(generateTextCvWithIA(cvSelected), {
       loading: "Generando...",
       success: "¡Listo!",
       error: "Error, no se pudo generar",
-    }); */
-    const text = await generateTextCvWithIA(cvSelected);
+    });
 
     textCvRef.current!.value = text;
     setIsFetching(false);
   };
 
   const handleSave = async () => {
-    setIsFetching(true);
     const cvSelected = selectCvRef.current!.value;
     const textValue = textCvRef.current!.value;
+
+    if (textValue.length < 110 || textValue.length > 30720) {
+      toast.error("Debe tener entre 110 y 30720 caracteres");
+      return;
+    }
+
+    setIsFetching(true);
     toast.promise(saveTextCvData(cvSelected, textValue), {
       loading: "Guardando...",
       success: "¡Guardado!",

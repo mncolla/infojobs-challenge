@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 const necesaryScope =
   "CV,CANDIDATE_READ_CURRICULUM_EDUCATION,CANDIDATE_READ_CURRICULUM_EXPERIENCE,CANDIDATE_READ_CURRICULUM_FUTURE_JOB,CANDIDATE_EDIT_CURRICULUM_CVTEXT,CANDIDATE_READ_CURRICULUM_CVTEXT";
@@ -17,12 +18,20 @@ const AuthButton = ({ code }: any) => {
 
   useEffect(() => {
     if (code) {
-      fetch(`/api/authorize`, {
-        headers: {
-          "Content-Type": "application/json",
-          "InfoJobs-Code": code,
-        },
-      })
+      toast
+        .promise(
+          fetch(`/api/authorize`, {
+            headers: {
+              "Content-Type": "application/json",
+              "InfoJobs-Code": code,
+            },
+          }),
+          {
+            loading: "Autenticando...",
+            success: "¡Bienvenido!",
+            error: "Error en autenticación",
+          }
+        )
         .then((data) => data.json())
         .then(({ data: { access_token, expires_in } }) => {
           const expirationDate = new Date(
