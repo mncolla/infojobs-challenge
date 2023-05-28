@@ -34,13 +34,19 @@ export async function GET(request: Request) {
       `/1/curriculum/${curriculumId}/education`
     );
 
+    console.log("debug educacion", education);
+
     const { experience: experiences }: Experience = await fetcher.get(
       `/2/curriculum/${curriculumId}/experience`
     );
 
+    console.log("debug experiences", experiences);
+
     const futureJob: FutureJob = await fetcher.get(
       `/4/curriculum/${curriculumId}/futurejob`
     );
+
+    console.log("debug future job", futureJob);
 
     const dataFilterer = new DataFormatter();
     const aiProcessor = new AIProcessor();

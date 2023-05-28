@@ -64,7 +64,7 @@ export class DataFormatter implements Handler {
           onCourse ? "Trabajo en" : "He trabajado"
         } en ${company} como ${job}`;
 
-        if (description)
+        if (description && description.length > 0)
           experienceLine += ` en mi rol hacía cosas como ${experienceLine}`;
         experienceLine += ` esto fue desde ${new Date(
           startingDate
@@ -112,7 +112,8 @@ export class DataFormatter implements Handler {
       if (futureJobGoals)
         futureJobLine += ` mis metas laborales son ${futureJobGoals} `;
 
-      futureJobLine += ` cuento con ${yearsOfExperience} años de experiencia`;
+      if (yearsOfExperience)
+        futureJobLine += ` cuento con ${yearsOfExperience} años de experiencia`;
 
       if (subcategories)
         futureJobLine += ` deseo poder trabajar como ${preferredPosition} dentro de las categorias ${subcategories.join(

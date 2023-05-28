@@ -35,6 +35,7 @@ const generateSummary = async (text: string) => {
 
     return summaryWithoutHeader;
   } catch (error) {
+    console.log("Error OPENAI:", error);
     throw error;
   }
 };
