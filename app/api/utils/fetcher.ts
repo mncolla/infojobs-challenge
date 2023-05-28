@@ -24,20 +24,16 @@ export class Fetcher {
   }
 
   async put(url: string, body: any): Promise<any> {
-    try {
-      const raw = await fetch(`${this.fetchUrl}${url}`, {
-        method: "PUT",
-        headers: {
-          ...this.headers,
-        },
-        body: JSON.stringify(body),
-      });
+    const raw = await fetch(`${this.fetchUrl}${url}`, {
+      method: "PUT",
+      headers: {
+        ...this.headers,
+      },
+      body: JSON.stringify(body),
+    });
 
-      const res = await raw.json();
+    const res = await raw.json();
 
-      return res;
-    } catch (error) {
-      console.log("error", error);
-    }
+    return res;
   }
 }

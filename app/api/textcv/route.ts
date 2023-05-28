@@ -16,8 +16,6 @@ export async function GET(request: Request) {
 
   const curriculums: Curriculum[] = await fetcher.get("/2/curriculum");
 
-  console.log("cvsss", curriculums);
-
   const cvtexts: TextCVResponse[] = await Promise.all(
     curriculums.map(async ({ principal, code, name }) => {
       const { cvtext } = await fetcher.get(`/1/curriculum/${code}/cvtext`);
